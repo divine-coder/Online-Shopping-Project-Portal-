@@ -24,7 +24,6 @@ How to run this Project
 Create database “shopping”.
 Import the database file( Database will be avail in the package)
 Link for the project: http://localhost/shopping
-Link for admin Panel: http://localhost/shopping/admin
 
 # Login Details For User :
 Username: anuj.lpu1@gmail.com
