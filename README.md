@@ -25,10 +25,6 @@ Create database “shopping”.
 Import the database file( Database will be avail in the package)
 Link for the project: http://localhost/shopping
 
-# Login Details For User :
-Username: anuj.lpu1@gmail.com
-Password : Test@123
-
 Project Name-	Online Shopping Portal in Php
 Language Used-  	PHP5.6, PHP7.x
 Database-	MySQL 5.x
