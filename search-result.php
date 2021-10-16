@@ -7,6 +7,17 @@ if(isset($_GET['action']) && $_GET['action']=="add"){
 	$id=intval($_GET['id']);
 	if(isset($_SESSION['cart'][$id])){
 		$_SESSION['cart'][$id]['quantity']++;
+	}else{
+		$sql_p="SELECT * FROM products WHERE id={$id}";
+		$query_p=mysqli_query($con,$sql_p);
+		if(mysqli_num_rows($query_p)!=0){
+			$row_p=mysqli_fetch_array($query_p);
+			$_SESSION['cart'][$row_p['id']]=array("quantity" => 1, "price" => $row_p['productPrice']);
+						echo "<script>alert('Product has been added to the cart')</script>";
+		echo "<script type='text/javascript'> document.location ='my-cart.php'; </script>";
+		}else{
+			$message="Product ID is invalid";
+		}
 	}
 }
 // COde for Wishlist
@@ -108,6 +119,14 @@ header('location:my-wishlist.php');
             <li class="dropdown menu-item">
               <?php $sql=mysqli_query($con,"select id,subcategory  from subcategory");
 
+while($row=mysqli_fetch_array($sql))
+{
+    ?>
+                <a href="sub-category.php?scid=<?php echo $row['id'];?>" class="dropdown-toggle"><i class="icon fa fa-desktop fa-fw"></i>
+                <?php echo $row['subcategory'];?></a>
+                <?php }?>
+                        
+</li>
 </ul>
     </nav>
 </div>
@@ -189,7 +208,18 @@ while ($row=mysqli_fetch_array($ret))
 		</div><!-- /.product-image -->
 			
 		
-		
+		<div class="product-info text-left">
+			<h3 class="name"><a href="product-details.php?pid=<?php echo htmlentities($row['id']);?>"><?php echo htmlentities($row['productName']);?></a></h3>
+			<div class="rating rateit-small"></div>
+			<div class="description"></div>
+
+			<div class="product-price">	
+				<span class="price">
+					Rs. <?php echo htmlentities($row['productPrice']);?>			</span>
+										     <span class="price-before-discount">Rs.<?php echo htmlentities($row['productPriceBeforeDiscount']);?></span>
+									
+			</div><!-- /.product-price -->
+			
 		</div><!-- /.product-info -->
 					<div class="cart clearfix animate-effect">
 				<div class="action">
