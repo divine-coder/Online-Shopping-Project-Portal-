@@ -30,10 +30,6 @@ Link for admin Panel: http://localhost/shopping/admin
 Username: anuj.lpu1@gmail.com
 Password : Test@123
 
-# For Admin :
-User Name: admin
-Password: Test@123
-
 Project Name-	Online Shopping Portal in Php
 Language Used-  	PHP5.6, PHP7.x
 Database-	MySQL 5.x
