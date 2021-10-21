@@ -15,7 +15,18 @@ if(isset($_POST['submit'])){
 			echo "<script>alert('Your Cart hasbeen Updated');</script>";
 		}
 	}
+// Code for Remove a Product from Cart
+if(isset($_POST['remove_code']))
+	{
 
+if(!empty($_SESSION['cart'])){
+		foreach($_POST['remove_code'] as $key){
+			
+				unset($_SESSION['cart'][$key]);
+		}
+			echo "<script>alert('Your Cart has been Updated');</script>";
+	}
+}
 // code for insert product in order table
 
 
@@ -54,6 +65,21 @@ header('location:payment-method.php');
 		if($query)
 		{
 echo "<script>alert('Billing Address has been updated');</script>";
+		}
+	}
+
+
+// code for Shipping address updation
+	if(isset($_POST['shipupdate']))
+	{
+		$saddress=$_POST['shippingaddress'];
+		$sstate=$_POST['shippingstate'];
+		$scity=$_POST['shippingcity'];
+		$spincode=$_POST['shippingpincode'];
+		$query=mysqli_query($con,"update users set shippingAddress='$saddress',shippingState='$sstate',shippingCity='$scity',shippingPincode='$spincode' where id='".$_SESSION['id']."'");
+		if($query)
+		{
+echo "<script>alert('Shipping Address has been updated');</script>";
 		}
 	}
 
@@ -170,6 +196,23 @@ if(!empty($_SESSION['cart'])){
 			<tbody>
  <?php
  $pdtid=array();
+    $sql = "SELECT * FROM products WHERE id IN(";
+			foreach($_SESSION['cart'] as $id => $value){
+			$sql .=$id. ",";
+			}
+			$sql=substr($sql,0,-1) . ") ORDER BY id ASC";
+			$query = mysqli_query($con,$sql);
+			$totalprice=0;
+			$totalqunty=0;
+			if(!empty($query)){
+			while($row = mysqli_fetch_array($query)){
+				$quantity=$_SESSION['cart'][$row['id']]['quantity'];
+				$subtotal= $_SESSION['cart'][$row['id']]['quantity']*$row['productPrice']+$row['shippingCharge'];
+				$totalprice += $subtotal;
+				$_SESSION['qnty']=$totalqunty+=$quantity;
+
+				array_push($pdtid,$row['id']);
+//print_r($_SESSION['pid'])=$pdtid;exit;
 	?>
 
 				<tr>
@@ -216,6 +259,10 @@ $num=mysqli_num_rows($rt);
 
 					<td class="cart-product-grand-total"><span class="cart-grand-total-price"><?php echo ($_SESSION['cart'][$row['id']]['quantity']*$row['productPrice']+$row['shippingCharge']); ?>.00</span></td>
 				</tr>
+
+				<?php } }
+$_SESSION['pid']=$pdtid;
+				?>
 				
 			</tbody><!-- /tbody -->
 		</table><!-- /table -->
@@ -377,7 +424,20 @@ echo "Your shopping Cart is empty";
 	<!-- For demo purposes – can be removed on production -->
 	
 	<script src="switchstylesheet/switchstylesheet.js"></script>
+	
+	<script>
+		$(document).ready(function(){ 
+			$(".changecolor").switchstylesheet( { seperator:"color"} );
+			$('.show-theme-options').click(function(){
+				$(this).parent().toggleClass('open');
+				return false;
+			});
+		});
 
+		$(window).bind("load", function() {
+		   $('.show-theme-options').delay(2000).trigger('click');
+		});
+	</script>
 	<!-- For demo purposes – can be removed on production : End -->
 </body>
 </html>
