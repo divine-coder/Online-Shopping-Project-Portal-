@@ -6,6 +6,20 @@ if(strlen($_SESSION['login'])==0)
     {   
 header('location:.php');
 }
+else{
+	// code for billing address updation
+	if(isset($_POST['update']))
+	{
+		$baddress=$_POST['billingaddress'];
+		$bstate=$_POST['bilingstate'];
+		$bcity=$_POST['billingcity'];
+		$bpincode=$_POST['billingpincode'];
+		$query=mysqli_query($con,"update users set billingAddress='$baddress',billingState='$bstate',billingCity='$bcity',billingPincode='$bpincode' where id='".$_SESSION['id']."'");
+		if($query)
+		{
+echo "<script>alert('Billing Address has been updated');</script>";
+		}
+	}
 
 
 // code for Shipping address updation
@@ -116,6 +130,11 @@ echo "<script>alert('Shipping Address has been updated');</script>";
 			<div class="row">		
 				<div class="col-md-12 col-sm-12 already-registered-login">
 
+<?php
+$query=mysqli_query($con,"select * from users where id='".$_SESSION['id']."'");
+while($row=mysqli_fetch_array($query))
+{
+?>
 
 					<form class="register-form" role="form" method="post">
 <div class="form-group">
@@ -233,7 +252,20 @@ while($row=mysqli_fetch_array($query))
 	<!-- For demo purposes – can be removed on production -->
 	
 	<script src="switchstylesheet/switchstylesheet.js"></script>
+	
+	<script>
+		$(document).ready(function(){ 
+			$(".changecolor").switchstylesheet( { seperator:"color"} );
+			$('.show-theme-options').click(function(){
+				$(this).parent().toggleClass('open');
+				return false;
+			});
+		});
 
+		$(window).bind("load", function() {
+		   $('.show-theme-options').delay(2000).trigger('click');
+		});
+	</script>
 </body>
 </html>
 <?php } ?>
